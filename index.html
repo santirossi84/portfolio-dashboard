@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio — Santiago</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0F1419;
+            --bg-darker: #0A0E13;
+            --bg-card: #1a1f2e;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a8b8;
+            --text-muted: #6b7280;
+            --border: #2a3142;
+            --accent-red: #ff4757;
+            --accent-cyan: #00d4ff;
+            --accent-yellow: #ffd700;
+            --accent-green: #2ecc71;
+            --glow-red: rgba(255, 71, 87, 0.1);
+            --glow-cyan: rgba(0, 212, 255, 0.1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-dark) 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            background-attachment: fixed;
+        }
+
+        /* HEADER */
+        header {
+            background: linear-gradient(180deg, rgba(26, 31, 46, 0.95) 0%, rgba(15, 20, 25, 0.8) 100%);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1.5rem;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .header-left h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.3rem;
+            background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-red) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-subtitle {
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        button {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-family: 'Lexend', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+        }
+
+        button.primary {
+            background: linear-gradient(135deg, var(--accent-cyan) 0%, #0099cc 100%);
+            color: var(--bg-dark);
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+        }
+
+        button.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        button.secondary {
+            background: linear-gradient(135deg, var(--accent-red) 0%, #ff3838 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+        }
+
+        button.secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4);
+        }
+
+        button.accent {
+            background: linear-gradient(135deg, var(--accent-yellow) 0%, #ffb000 100%);
+            color: var(--bg-dark);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        button.accent:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+        }
+
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            padding-bottom: 5rem;
+        }
+
+        /* SUMMARY CARDS */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .card {
+            padding: 2rem;
+            border: 1px solid var(--border);
+            background: linear-gradient(135deg, rgba(26, 31, 46, 0.8) 0%, rgba(26, 31, 46, 0.5) 100%);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
+        }
+
+        .card:hover {
+            border-color: var(--border);
+            transform: translateY(-4px);
+        }
+
+        .card.usd {
+            border-left: 4px solid var(--accent-cyan);
+        }
+
+        .card.usd:hover {
+            box-shadow: 0 8px 32px var(--glow-cyan);
+        }
+
+        .card.ars {
+            border-left: 4px solid var(--accent-red);
+        }
+
+        .card.ars:hover {
+            box-shadow: 0 8px 32px var(--glow-red);
+        }
+
+        .card.progress {
+            border-left: 4px solid var(--accent-yellow);
+        }
+
+        .card-label {
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .card-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .card.usd .card-value {
+            color: var(--accent-cyan);
+        }
+
+        .card.ars .card-value {
+            color: var(--accent-red);
+        }
+
+        .card.progress .card-value {
+            color: var(--accent-yellow);
+        }
+
+        .card-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background-color: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-yellow) 0%, var(--accent-red) 100%);
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        /* TABS */
+        .tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 1rem 1.5rem;
+            background-color: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-family: 'Lexend', sans-serif;
+            color: var(--text-muted);
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-secondary);
+        }
+
+        .tab-btn.active {
+            color: var(--accent-cyan);
+            border-bottom-color: var(--accent-cyan);
+            box-shadow: 0 2px 0 var(--accent-cyan);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ASSETS */
+        .assets-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .assets-count {
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .asset-row {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--accent-cyan);
+            background: linear-gradient(135deg, rgba(26, 31, 46, 0.6) 0%, rgba(26, 31, 46, 0.3) 100%);
+            margin-bottom: 0.75rem;
+            align-items: center;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .asset-row:hover {
+            border-left-color: var(--accent-red);
+            background: linear-gradient(135deg, rgba(26, 31, 46, 0.8) 0%, rgba(26, 31, 46, 0.5) 100%);
+            transform: translateX(4px);
+        }
+
+        .asset-info h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        .asset-meta {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .asset-amount {
+            text-align: right;
+        }
+
+        .asset-primary {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+        }
+
+        .asset-secondary {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .asset-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 0.8rem;
+            font-size: 0.7rem;
+        }
+
+        /* CHARTS */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            background: linear-gradient(135deg, rgba(26, 31, 46, 0.6) 0%, rgba(26, 31, 46, 0.3) 100%);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .chart-title {
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        /* FORM */
+        .form-section {
+            background: linear-gradient(135deg, rgba(26, 31, 46, 0.6) 0%, rgba(26, 31, 46, 0.3) 100%);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-section h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 0.8rem;
+            border: 1px solid var(--border);
+            background-color: rgba(15, 20, 25, 0.5);
+            font-family: 'Lexend', sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .form-group input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            background-color: rgba(0, 212, 255, 0.05);
+            box-shadow: 0 0 0 3px var(--glow-cyan);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .alert {
+            padding: 1rem;
+            background: linear-gradient(135deg, rgba(255, 71, 87, 0.1) 0%, rgba(255, 71, 87, 0.05) 100%);
+            border: 1px solid rgba(255, 71, 87, 0.3);
+            border-left: 3px solid var(--accent-red);
+            color: var(--accent-red);
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            border-radius: 6px;
+        }
+
+        /* TABLE */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead tr {
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem;
+            font-weight: 600;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        tbody tr:hover {
+            background-color: rgba(0, 212, 255, 0.05);
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 1rem 1.5rem;
+            background: linear-gradient(180deg, rgba(26, 31, 46, 0.95) 0%, rgba(15, 20, 25, 0.8) 100%);
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-around;
+            gap: 1rem;
+            flex-wrap: wrap;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        footer span {
+            color: var(--accent-cyan);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .header-left h1 {
+                font-size: 1.4rem;
+            }
+
+            main {
+                padding: 1rem;
+                padding-bottom: 4rem;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-value {
+                font-size: 1.6rem;
+            }
+
+            .tab-btn {
+                padding: 0.75rem 1rem;
+                font-size: 0.75rem;
+            }
+
+            .asset-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .asset-amount {
+                text-align: left;
+            }
+
+            footer {
+                font-size: 0.65rem;
+                padding: 0.75rem;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="header-left">
+                <div class="header-subtitle">🚀 Portfolio Tracker</div>
+                <h1>Santiago R.</h1>
+            </div>
+            <div class="header-buttons">
+                <button class="primary" onclick="toggleHide()">👁 Ocultar</button>
+                <button class="accent" onclick="takeSnapshot()">📸 Snapshot</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- SUMMARY CARDS -->
+        <div class="summary-grid">
+            <div class="card usd">
+                <div class="card-label">💰 Patrimonio USD CCL</div>
+                <div class="card-value" id="totalUSD">$0.00</div>
+                <div class="card-subtitle" id="cclInfo">al CCL $1.489</div>
+            </div>
+            <div class="card ars">
+                <div class="card-label">🇦🇷 Equivalente ARS</div>
+                <div class="card-value" id="totalARS">$0</div>
+                <div class="card-subtitle" id="assetCount">0 posiciones</div>
+            </div>
+            <div class="card progress">
+                <div class="card-label">🎯 Progreso Objetivo</div>
+                <div class="card-value" id="progressPct">0%</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TABS -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('resumen')">Resumen</button>
+            <button class="tab-btn" onclick="switchTab('activos')">Activos</button>
+            <button class="tab-btn" onclick="switchTab('historico')">Histórico</button>
+            <button class="tab-btn" onclick="switchTab('config')">Config</button>
+        </div>
+
+        <!-- TAB: RESUMEN -->
+        <div id="tab-resumen" class="tab-content active">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                <div>
+                    <div class="chart-container">
+                        <div class="chart-title">📊 Distribución por Categoría</div>
+                        <canvas id="chartCategoria"></canvas>
+                    </div>
+                </div>
+                <div>
+                    <div class="chart-container">
+                        <div class="chart-title">💱 Exposición por Moneda</div>
+                        <canvas id="chartMoneda"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div id="expositionAlert" class="alert hidden">
+                ⚠️ Exposición a pesos &gt; 50%. Considerá dolarizar más.
+            </div>
+        </div>
+
+        <!-- TAB: ACTIVOS -->
+        <div id="tab-activos" class="tab-content">
+            <div class="assets-section">
+                <div class="assets-count" id="assetCountLabel">0 posiciones</div>
+                <button class="primary" onclick="toggleAddForm()">+ Agregar Posición</button>
+            </div>
+
+            <div id="addForm" class="form-section hidden">
+                <h3>Nueva Posición</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" id="formNombre" placeholder="Ej. LECAP S30A6">
+                    </div>
+                    <div class="form-group">
+                        <label>Plataforma</label>
+                        <input type="text" id="formPlataforma" placeholder="Cocos / Lemon / Banco">
+                    </div>
+                    <div class="form-group">
+                        <label>Categoría</label>
+                        <select id="formCategoria">
+                            <option value="liquidez">Liquidez ARS</option>
+                            <option value="renta_fija">Renta Fija ARS</option>
+                            <option value="cedears">CEDEARs (USD)</option>
+                            <option value="cripto">Cripto</option>
+                            <option value="on">ON Hard Dollar</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Moneda</label>
+                        <select id="formMoneda">
+                            <option value="ARS">Pesos (ARS)</option>
+                            <option value="USD">Dólares (USD)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Cantidad</label>
+                        <input type="number" id="formCantidad" placeholder="0" step="any">
+                    </div>
+                    <div class="form-group">
+                        <label>TNA % (opcional)</label>
+                        <input type="number" id="formTNA" placeholder="0" step="0.1">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Notas</label>
+                    <input type="text" id="formNotas" placeholder="Recordatorios, vencimientos...">
+                </div>
+                <div class="button-group">
+                    <button class="primary" onclick="addAsset()">✓ Guardar</button>
+                    <button class="secondary" onclick="toggleAddForm()">✕ Cancelar</button>
+                </div>
+            </div>
+
+            <div id="assetsList"></div>
+        </div>
+
+        <!-- TAB: HISTÓRICO -->
+        <div id="tab-historico" class="tab-content">
+            <div class="chart-container">
+                <div class="chart-title">📈 Evolución del Patrimonio</div>
+                <canvas id="chartHistorico" height="80"></canvas>
+            </div>
+            <div id="historyTable"></div>
+        </div>
+
+        <!-- TAB: CONFIG -->
+        <div id="tab-config" class="tab-content">
+            <div class="form-section">
+                <h3>⚙️ Cotizaciones de Referencia</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Dólar CCL</label>
+                        <input type="number" id="configCCL" placeholder="1489" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Dólar MEP</label>
+                        <input type="number" id="configMEP" placeholder="1437" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Inflación Proy. (%)</label>
+                        <input type="number" id="configInflacion" placeholder="31.8" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label>Objetivo (USD)</label>
+                        <input type="number" id="configObjetivo" placeholder="12000" step="100">
+                    </div>
+                </div>
+                <button class="primary" onclick="saveConfig()">✓ Guardar Config</button>
+            </div>
+
+            <div class="form-section">
+                <h3>📊 Datos</h3>
+                <p style="font-size: 0.9rem; margin-bottom: 1rem;">
+                    <strong>Última actualización:</strong> <span id="lastUpdate">—</span><br>
+                    <strong>Snapshots guardados:</strong> <span id="snapshotCount" style="color: var(--accent-yellow);">0</span>
+                </p>
+                <div class="button-group">
+                    <button class="primary" onclick="exportData()">📥 Exportar JSON</button>
+                    <button class="secondary" onclick="resetData()">🔄 Reset</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <span>📍 CCL $<span id="footerCCL">1489</span></span>
+        <span>📍 MEP $<span id="footerMEP">1437</span></span>
+        <span>📈 Inflación <span id="footerInflacion">31.8</span>%</span>
+    </footer>
+
+    <script>
+        // ======= STATE =======
+        const DEFAULT_DATA = {
+            ccl: 1489,
+            mep: 1437,
+            inflacion: 31.8,
+            objetivo: 12000,
+            assets: [
+                { id: 1, nombre: 'Cuenta a la vista', plataforma: 'Banco', categoria: 'liquidez', moneda: 'ARS', cantidad: 1000000, tna: 22.5, notas: '' },
+                { id: 2, nombre: 'Plazo Fijo 30d', plataforma: 'Banco', categoria: 'renta_fija', moneda: 'ARS', cantidad: 1000000, tna: 26.5, notas: 'Mover a LECAP' },
+                { id: 3, nombre: 'USDT', plataforma: 'Binance', categoria: 'cripto', moneda: 'USD', cantidad: 257, tna: 0, notas: 'Mover a Lemon Earn' },
+                { id: 4, nombre: 'ETH', plataforma: 'Lemon', categoria: 'cripto', moneda: 'USD', cantidad: 100, tna: 0, notas: '' },
+            ],
+            history: [],
+            lastUpdate: new Date().toISOString(),
+        };
+
+        let state = localStorage.getItem('portfolioData') 
+            ? JSON.parse(localStorage.getItem('portfolioData'))
+            : DEFAULT_DATA;
+
+        let hideMode = false;
+        let chartCategoria = null;
+        let chartMoneda = null;
+        let chartHistorico = null;
+
+        // ======= SAVE/LOAD =======
+        function save() {
+            state.lastUpdate = new Date().toISOString();
+            localStorage.setItem('portfolioData', JSON.stringify(state));
+            render();
+        }
+
+        function toggleHide() {
+            hideMode = !hideMode;
+            render();
+        }
+
+        // ======= ASSETS =======
+        function addAsset() {
+            const nombre = document.getElementById('formNombre').value.trim();
+            if (!nombre) return alert('Falta el nombre');
+
+            const asset = {
+                id: Date.now(),
+                nombre,
+                plataforma: document.getElementById('formPlataforma').value,
+                categoria: document.getElementById('formCategoria').value,
+                moneda: document.getElementById('formMoneda').value,
+                cantidad: parseFloat(document.getElementById('formCantidad').value) || 0,
+                tna: parseFloat(document.getElementById('formTNA').value) || 0,
+                notas: document.getElementById('formNotas').value,
+            };
+
+            state.assets.push(asset);
+            document.getElementById('formNombre').value = '';
+            document.getElementById('formPlataforma').value = '';
+            document.getElementById('formCantidad').value = '';
+            document.getElementById('formTNA').value = '';
+            document.getElementById('formNotas').value = '';
+            toggleAddForm();
+            save();
+        }
+
+        function deleteAsset(id) {
+            if (confirm('¿Eliminar esta posición?')) {
+                state.assets = state.assets.filter(a => a.id !== id);
+                save();
+            }
+        }
+
+        function toggleAddForm() {
+            document.getElementById('addForm').classList.toggle('hidden');
+        }
+
+        // ======= SNAPSHOT =======
+        function takeSnapshot() {
+            const total = calculateTotals();
+            const snapshot = {
+                fecha: new Date().toISOString().split('T')[0],
+                usd: total.usd,
+                ars: total.ars,
+            };
+            state.history.push(snapshot);
+            save();
+            alert('✓ Snapshot guardado');
+        }
+
+        // ======= CALCULATIONS =======
+        function calculateTotals() {
+            const ccl = state.ccl || 1489;
+            let totalARS = 0, totalUSD = 0;
+
+            state.assets.forEach(a => {
+                if (a.moneda === 'ARS') {
+                    totalARS += a.cantidad;
+                    totalUSD += a.cantidad / ccl;
+                } else {
+                    totalUSD += a.cantidad;
+                    totalARS += a.cantidad * ccl;
+                }
+            });
+
+            return { ars: totalARS, usd: totalUSD };
+        }
+
+        function getByCategory() {
+            const ccl = state.ccl || 1489;
+            const cats = {};
+            state.assets.forEach(a => {
+                const val = a.moneda === 'ARS' ? a.cantidad / ccl : a.cantidad;
+                cats[a.categoria] = (cats[a.categoria] || 0) + val;
+            });
+            return cats;
+        }
+
+        function getExposition() {
+            const ccl = state.ccl || 1489;
+            let ars = 0, usd = 0;
+            state.assets.forEach(a => {
+                if (a.moneda === 'ARS') {
+                    ars += a.cantidad / ccl;
+                } else {
+                    usd += a.cantidad;
+                }
+            });
+            return { ars, usd };
+        }
+
+        // ======= RENDER =======
+        function render() {
+            renderSummary();
+            renderAssets();
+            renderCharts();
+            renderHistory();
+            renderConfig();
+        }
+
+        function renderSummary() {
+            const t = calculateTotals();
+            const progress = (t.usd / state.objetivo) * 100;
+            const exp = getExposition();
+            const expPct = exp.ars / (exp.ars + exp.usd);
+
+            document.getElementById('totalUSD').textContent = hideMode ? '••••••' : `$${t.usd.toFixed(2)}`;
+            document.getElementById('totalARS').textContent = hideMode ? '••••••' : `$${Math.round(t.ars).toLocaleString('es-AR')}`;
+            document.getElementById('cclInfo').textContent = `al CCL $${state.ccl.toLocaleString('es-AR')}`;
+            document.getElementById('assetCount').textContent = `${state.assets.length} posiciones activas`;
+            document.getElementById('progressPct').textContent = `${progress.toFixed(1)}%`;
+            document.getElementById('progressBar').style.width = `${Math.min(100, progress)}%`;
+
+            document.getElementById('expositionAlert').classList.toggle('hidden', expPct <= 0.5);
+        }
+
+        function renderAssets() {
+            const ccl = state.ccl || 1489;
+            const catEmoji = {
+                'liquidez': '◐',
+                'renta_fija': '◑',
+                'cedears': '◒',
+                'cripto': '◓',
+                'on': '◔'
+            };
+
+            const html = state.assets.map(a => {
+                const valUSD = a.moneda === 'USD' ? a.cantidad : a.cantidad / ccl;
+                return `
+                    <div class="asset-row">
+                        <div class="asset-info">
+                            <h3>${catEmoji[a.categoria] || '•'} ${a.nombre}</h3>
+                            <div class="asset-meta">${a.categoria.replace('_', ' ').toUpperCase()} · ${a.plataforma}</div>
+                            ${a.notas ? `<div class="asset-meta" style="margin-top: 0.5rem; color: var(--text-secondary);">💡 ${a.notas}</div>` : ''}
+                        </div>
+                        <div class="asset-amount">
+                            <div class="asset-primary">${hideMode ? '••••' : `${a.moneda} ${a.cantidad.toLocaleString('es-AR', {maximumFractionDigits: 2})}`}</div>
+                            <div class="asset-secondary">≈ USD ${hideMode ? '••••' : valUSD.toFixed(2)}</div>
+                            ${a.tna > 0 ? `<div class="asset-secondary" style="color: var(--accent-yellow); margin-top: 0.25rem;">TNA ${a.tna}%</div>` : ''}
+                        </div>
+                        <div class="asset-actions">
+                            <button class="btn-small secondary" onclick="deleteAsset(${a.id})">🗑</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('assetsList').innerHTML = html || '<p style="text-align: center; color: var(--text-muted); padding: 2rem;">Sin activos. ¡Agregá el primero!</p>';
+            document.getElementById('assetCountLabel').textContent = `${state.assets.length} posiciones`;
+        }
+
+        function renderCharts() {
+            const catData = getByCategory();
+            const expData = getExposition();
+
+            const catLabels = Object.keys(catData);
+            const catValues = Object.values(catData);
+            const catColors = ['#00d4ff', '#ff4757', '#2ecc71', '#ffd700', '#a29bfe'];
+
+            const ctxCat = document.getElementById('chartCategoria');
+            if (chartCategoria) chartCategoria.destroy();
+            chartCategoria = new Chart(ctxCat, {
+                type: 'doughnut',
+                data: {
+                    labels: catLabels.map(c => c.replace('_', ' ').toUpperCase()),
+                    datasets: [{
+                        data: catValues,
+                        backgroundColor: catColors,
+                        borderColor: '#1a1f2e',
+                        borderWidth: 2,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { 
+                            position: 'bottom',
+                            labels: { color: '#a0a8b8', font: { family: "'Lexend', sans-serif", weight: '600' } }
+                        } 
+                    }
+                }
+            });
+
+            const ctxMon = document.getElementById('chartMoneda');
+            if (chartMoneda) chartMoneda.destroy();
+            chartMoneda = new Chart(ctxMon, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Pesos (ARS)', 'Dólares (USD)'],
+                    datasets: [{
+                        data: [expData.ars, expData.usd],
+                        backgroundColor: ['#ff4757', '#00d4ff'],
+                        borderColor: '#1a1f2e',
+                        borderWidth: 2,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { 
+                            position: 'bottom',
+                            labels: { color: '#a0a8b8', font: { family: "'Lexend', sans-serif", weight: '600' } }
+                        } 
+                    }
+                }
+            });
+
+            const hist = state.history.slice(-30).map(h => ({
+                fecha: h.fecha.slice(5),
+                usd: h.usd
+            }));
+
+            const ctxHist = document.getElementById('chartHistorico');
+            if (chartHistorico) chartHistorico.destroy();
+            if (hist.length > 1) {
+                chartHistorico = new Chart(ctxHist, {
+                    type: 'line',
+                    data: {
+                        labels: hist.map(h => h.fecha),
+                        datasets: [{
+                            label: 'USD CCL',
+                            data: hist.map(h => h.usd),
+                            borderColor: '#00d4ff',
+                            backgroundColor: 'rgba(0, 212, 255, 0.1)',
+                            borderWidth: 2,
+                            pointBackgroundColor: '#ff4757',
+                            pointRadius: 5,
+                            fill: true,
+                            tension: 0.3,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { 
+                            legend: { 
+                                display: true,
+                                labels: { color: '#a0a8b8', font: { family: "'Lexend', sans-serif", weight: '600' } }
+                            } 
+                        },
+                        scales: {
+                            y: { ticks: { color: '#6b7280' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                            x: { ticks: { color: '#6b7280' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+                        }
+                    }
+                });
+            }
+        }
+
+        function renderHistory() {
+            if (state.history.length === 0) {
+                document.getElementById('historyTable').innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 2rem;">Sin snapshots. Tocá "Snapshot" para registrar.</p>';
+                return;
+            }
+
+            const html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th style="text-align: right;">USD</th>
+                            <th style="text-align: right;">ARS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${[...state.history].reverse().slice(0, 15).map(h => `
+                            <tr>
+                                <td>${h.fecha}</td>
+                                <td style="text-align: right;">$${hideMode ? '••••' : h.usd.toFixed(2)}</td>
+                                <td style="text-align: right;">$${hideMode ? '••••' : Math.round(h.ars).toLocaleString('es-AR')}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            document.getElementById('historyTable').innerHTML = html;
+        }
+
+        function renderConfig() {
+            document.getElementById('configCCL').value = state.ccl;
+            document.getElementById('configMEP').value = state.mep;
+            document.getElementById('configInflacion').value = state.inflacion;
+            document.getElementById('configObjetivo').value = state.objetivo;
+            document.getElementById('lastUpdate').textContent = new Date(state.lastUpdate).toLocaleString('es-AR');
+            document.getElementById('snapshotCount').textContent = state.history.length;
+
+            document.getElementById('footerCCL').textContent = state.ccl.toLocaleString('es-AR');
+            document.getElementById('footerMEP').textContent = state.mep.toLocaleString('es-AR');
+            document.getElementById('footerInflacion').textContent = state.inflacion;
+        }
+
+        function saveConfig() {
+            state.ccl = parseFloat(document.getElementById('configCCL').value) || 1489;
+            state.mep = parseFloat(document.getElementById('configMEP').value) || 1437;
+            state.inflacion = parseFloat(document.getElementById('configInflacion').value) || 31.8;
+            state.objetivo = parseFloat(document.getElementById('configObjetivo').value) || 12000;
+            save();
+            alert('✓ Config guardada');
+        }
+
+        function exportData() {
+            const json = JSON.stringify(state, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `portfolio_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+        }
+
+        function resetData() {
+            if (confirm('¿Resetear todo? Se perderán los datos.')) {
+                localStorage.removeItem('portfolioData');
+                state = DEFAULT_DATA;
+                save();
+                alert('✓ Datos reseteados');
+            }
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(`tab-${tab}`).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // ======= INIT =======
+        render();
+    </script>
+</body>
+</html>
